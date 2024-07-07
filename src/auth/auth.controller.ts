@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Inject, Body, Req } from '@nestjs/common';
+import { Controller, Get, Post, Inject, Body, Req, UseGuards } from '@nestjs/common';
 import { NATS_SERVICE } from 'src/config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto';
 import { catchError } from 'rxjs';
+import { AuthGuard } from './guards';
 
 
 @Controller('auth')
@@ -33,9 +34,10 @@ export class AuthController {
       )
   }
 
+  @UseGuards(AuthGuard) // obtiene el usuario y el token de los headers, generado por el authService en el login
   @Get('verify')
-  verifyUser(@Req() req){ // recibimos el token generado por el authService en el login
-    console.log(req.headers);
-    return this.client.send('auth.verify.user', {})
+  verifyUser(@Req() req){ // recibimos el token y se pasa a la función del auth-ms
+  
+    return this.client.send('auth.verify.user', {}) // Si no estuviera presente el token lanzaría error y no pasaría al "auth.verify.user"
   }
 }
