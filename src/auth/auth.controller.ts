@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Inject, Body } from '@nestjs/common';
+import { Controller, Get, Post, Inject, Body, Req } from '@nestjs/common';
 import { NATS_SERVICE } from 'src/config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { RegisterUserDto } from './dto/register-user.dto';
@@ -34,7 +34,8 @@ export class AuthController {
   }
 
   @Get('verify')
-  verifyUser(){
+  verifyUser(@Req() req){ // recibimos el token generado por el authService en el login
+    console.log(req.headers);
     return this.client.send('auth.verify.user', {})
   }
 }
