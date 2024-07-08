@@ -36,15 +36,10 @@ export class AuthController {
       )
   }
 
-  @UseGuards(AuthGuard) // obtiene el usuario y el token de los headers, generado por el authService en el login
+  @UseGuards(AuthGuard) // obtiene el usuario y el token de los headers, generado por el authService en el login -> verifica token -> asigna user y token a la request
   @Get('verify')
-  verifyUser(@User() user:CurrentUser, @Token() token:string){ // recibimos el token con el decorator y se lo pasamos a la función del auth-ms
+  verifyUser(@User() user:CurrentUser, @Token() token:string){ // recibimos el user y token con los decorators desde la request modificada 
   
-    // const user = req['user'];
-    // const token = req['token']
-
-    // return this.client.send('auth.verify.user', {}) // Si no estuviera presente el token lanzaría error y no pasaría al "auth.verify.user"
-  
-    return { user, token }
+    return { user, token }                                     // Devolvemos el usuario y el token verificado y renovado 
   }
 }
