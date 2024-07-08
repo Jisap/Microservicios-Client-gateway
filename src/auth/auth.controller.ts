@@ -5,6 +5,8 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto';
 import { catchError } from 'rxjs';
 import { AuthGuard } from './guards';
+import { Token, User } from 'src/decorators';
+import { CurrentUser } from './interfaces/current-user.interface';
 
 
 @Controller('auth')
@@ -36,8 +38,13 @@ export class AuthController {
 
   @UseGuards(AuthGuard) // obtiene el usuario y el token de los headers, generado por el authService en el login
   @Get('verify')
-  verifyUser(@Req() req){ // recibimos el token y se pasa a la función del auth-ms
+  verifyUser(@User() user:CurrentUser, @Token() token:string){ // recibimos el token con el decorator y se lo pasamos a la función del auth-ms
   
-    return this.client.send('auth.verify.user', {}) // Si no estuviera presente el token lanzaría error y no pasaría al "auth.verify.user"
+    // const user = req['user'];
+    // const token = req['token']
+
+    // return this.client.send('auth.verify.user', {}) // Si no estuviera presente el token lanzaría error y no pasaría al "auth.verify.user"
+  
+    return { user, token }
   }
 }
