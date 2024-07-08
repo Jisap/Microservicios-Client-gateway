@@ -7,9 +7,10 @@ import {
 } from '@nestjs/common';
 
 import { Request } from 'express';
-import { NATS_SERVICE } from '../../../../payments-ms/src/config/services';
+
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import { NATS_SERVICE } from 'src/config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
